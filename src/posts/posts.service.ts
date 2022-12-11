@@ -38,4 +38,13 @@ export default class PostsService {
     throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
   }
 
+  deletePost(id: number) {
+    const postIndex = this.posts.findIndex(post => post.id === id);
+    if (postIndex > -1) {
+      this.posts.splice(postIndex, 1);
+    } else {
+      throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+    }
+  }
+
 }
