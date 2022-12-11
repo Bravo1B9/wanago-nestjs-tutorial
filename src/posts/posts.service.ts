@@ -16,4 +16,13 @@ export default class PostsService {
     this.posts.push(newPost);
     return newPost;
   }
+
+  getPostById(id: number) {
+    const post = this.posts.find(post => post.id === id);
+    if (post) {
+      return post;
+    }
+    throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+  }
+
 }
