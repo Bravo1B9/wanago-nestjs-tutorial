@@ -29,4 +29,13 @@ export default class PostsService {
     return this.posts;
   }
 
+  replacePost(id: number, post: UpdatePostDto) {
+    const postIndex = this.posts.findIndex(post => post.id === id);
+    if (postIndex > -1) {
+      this.posts[postIndex] = post;
+      return post;
+    }
+    throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+  }
+
 }
