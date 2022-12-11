@@ -25,4 +25,8 @@ export default class PostsService {
     throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
   }
 
+  getAllPosts() {
+    return this.posts;
+  }
+
 }
