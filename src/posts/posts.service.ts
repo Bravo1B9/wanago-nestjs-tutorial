@@ -18,20 +18,32 @@ export default class PostsService {
     return newPost;
   }
 
-  getPostById(id: number) {
-    
+  async getPostById(id: number): Promise<Post> {
+    const post = await this.postsRepository.findOne({ where: {id} });
+    if (post) {
+      return post;
+    }
+    throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
   }
 
   getAllPosts() {
-    
+    return this.postsRepository.find();
   }
 
-  replacePost(id: number, post: UpdatePostDto) {
-    
+  async updatePost(id: number, post: UpdatePostDto): Promise<Post> {
+    await this.postsRepository.update(id, post);
+    const updatedPost = await this.postsRepository.findOne({where: {id}});
+    if (updatedPost) {
+      return updatedPost
+    }
+    throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
   }
 
-  deletePost(id: number) {
-    
+  async deletePost(id: number) {
+    const deleteResponse = await this.postsRepository.delete(id);
+    if (!deleteResponse.affected) {
+      throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+    }
   }
 
 }
