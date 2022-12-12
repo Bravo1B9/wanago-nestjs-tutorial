@@ -24,12 +24,12 @@ export default class PostsController {
     return this.postsService.getAllPosts();
   }
 
-  @Put('id')
+  @Put(':id')
   async replacePost(@Param('id') id: string, @Body() post: UpdatePostDto) {
     return this.postsService.replacePost(Number(id), post);
   }
 
-  @Delete('id')
+  @Delete(':id')
   async deletePost(@Param('id') id: string) {
     this.postsService.deletePost(Number(id));
   }
