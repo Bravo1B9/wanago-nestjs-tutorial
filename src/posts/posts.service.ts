@@ -32,14 +32,14 @@ export default class PostsService {
 
   async updatePost(id: number, post: UpdatePostDto): Promise<Post> {
     await this.postsRepository.update(id, post);
-    const updatedPost = await this.postsRepository.findOne({where: {id}});
+    const updatedPost = await this.postsRepository.findOne({ where: {id} });
     if (updatedPost) {
       return updatedPost
     }
     throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
   }
 
-  async deletePost(id: number) {
+  async deletePost(id: number): Promise<void> {
     const deleteResponse = await this.postsRepository.delete(id);
     if (!deleteResponse.affected) {
       throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
