@@ -5,11 +5,14 @@ import { UsersService } from "src/users/users.service";
 import RegisterDto from "./dto/register.dto";
 import * as bcrypt from "bcrypt";
 import PostgresErrorCode from "src/database/postgresErrorCode.enum";
+import TokenPayload from "./tokenPayload.interface";
 
 @Injectable()
 export class AuthenticationService {
   constructor(
     private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService
   ) {}
 
   public async register(registrationData: RegisterDto) {
@@ -27,6 +30,12 @@ export class AuthenticationService {
       }
       throw new HttpException('Something went wrong', HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  public getCookieWithJwtToken(userId: number) {
+    const payload: TokenPayload = { userId };
+    const token = this.jwtService.sign(payload);
+    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get('JWT_EXPIRATION_TIME')}`;
   }
 
   async getAuthenticatedUser(email: string, plainTextPassword: string) {
